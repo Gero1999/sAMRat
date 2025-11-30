@@ -1,0 +1,26 @@
+Package: sAMRat
+Type: Package
+Title: Shiny Antimicrobial Resistance (AMR) Analysis Tool
+Version: 0.1.0
+Authors@R: c(
+        person(
+          "Gerardo Jose", "Rodriguez", email = "gerardo.jrac@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1413-0060")
+        ),
+  )
+Description: A 'shiny' application to perform antimicrobial resistance data analysis
+    and generate reports with visualizations and statistics. It uses the 'AMR'
+    package for most data processing and analysis. Berends MS, Luz CF, Friedrich AW, Sinha BNM, Albers CJ, Glasner C.
+    An R package for working with antimicrobial resistance data. J Stat Softw. 2022;104(3):1–31. doi:10.18637/jss.v104.i03
+License: Apache-2.0
+Imports: 
+    AMR,
+    dplyr,
+    ggplot2,
+    shiny
+Suggests:
+    testthat
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 7.3.3
