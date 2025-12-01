@@ -12,3 +12,7 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 
 **Describe a solution you'd like (optional; if you have any)**
 A clear and concise description of what you want to happen.
+
+** TO DO list (summary list of things to address)**
+- [ ] 
+- [ ] 
