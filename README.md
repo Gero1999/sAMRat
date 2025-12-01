@@ -47,7 +47,8 @@ shiny::runApp(system.file("shiny/app", package = "sAMRat"))
 
 ## Contributing
 
-Check our [contributing guidelines - yet not available]().
+The project is in an early stage and highly open to spontaneous or active contributors!
+Check our [contributing guidelines](https://github.com/Gero1999/sAMRat/CONTRIBUTING.md).
 
 
 ## Documentation and references
