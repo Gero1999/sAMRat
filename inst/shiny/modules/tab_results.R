@@ -18,11 +18,11 @@ tab_results_ui <- function(id) {
       ),
       tabPanel("Antibiograms",
         br(),
-        textOutput(renderText("Antibiograms coming soon"))  # Placeholder for future implementation
+        p("Antibiograms coming soon")  # Placeholder for future implementation
       ),
       tabPanel("MDR",
         br(),
-        textOutput(renderText("MDR analysis coming soon"))  # Placeholder for future implementation
+        p("MDR analysis coming soon")  # Placeholder for future implementation
       )
     )
   )
