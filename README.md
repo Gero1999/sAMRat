@@ -1,5 +1,5 @@
 # shiny `AMR` analysis tool (`sAMRat`)
-<img src='man/figures/logo_samrat.png' align="right" alt="sAMRat logo" width="150">
+<img src='man/figures/logo1.png' align="right" alt="sAMRat logo" width="150">
 
 <br/>
 <br/>
