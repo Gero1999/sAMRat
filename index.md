@@ -43,7 +43,7 @@ git clone https://github.com/Gero1999/sAMRat
 Then load it using [devtools](https://github.com/r-lib/devtools):
 
 ```r
-if (!requireNamespace("devtools", quietly = FALSE)) {
+if (!requireNamespace("devtools", quietly = TRUE)) {
   install.packages("devtools")
 }
 devtools::load_all()

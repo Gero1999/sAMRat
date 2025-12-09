@@ -137,14 +137,9 @@ We welcome contributions in many areas:
 ### Required Tools
 
 ```{r eval=FALSE}
-# Install development tools
-install.packages(c(
-  "devtools",      # Development tools
-  "testthat",      # Testing framework
-  "roxygen2",      # Documentation
-  "pkgdown",       # Website generation
-  "lintr"          # Code linting
-))
+# Install development tools if not already available
+pkgs <- c("devtools", "testthat", "roxygen2", "pkgdown", "lintr")
+install.packages(pkgs[!pkgs %in% installed.packages()[,"Package"]])
 ```
 
 ### Running the Application Locally
