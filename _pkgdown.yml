@@ -1,5 +1,9 @@
 url: https://gero1999.github.io/sAMRat/
 
+logo:
+  src: man/figures/logo1.png
+  alt: "sAMRat logo"
+
 template:
   bootstrap: 5
   bootswatch: flatly
@@ -52,6 +56,12 @@ home:
   links:
   - text: Browse source code
     href: https://github.com/Gero1999/sAMRat
+  - text: Report a bug
+    href: https://github.com/Gero1999/sAMRat/issues/new?template=bug_report.md
+  - text: Request a feature
+    href: https://github.com/Gero1999/sAMRat/issues/new?template=feature_request.md
+  sidebar:
+    structure: [links, license, community, citation, authors, dev]
 
 reference:
 - title: Core Functions
