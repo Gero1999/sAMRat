@@ -1,0 +1,215 @@
+---
+title: "Contributing to sAMRat"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contributing to sAMRat}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Welcome Contributors!
+
+Thank you for your interest in contributing to **sAMRat** (Shiny Antimicrobial Resistance Analysis Tool)! This package is in active development, and we welcome contributions from the community.
+
+> **📄 For the complete and most up-to-date contributing guidelines, please see our [CONTRIBUTING.md](https://github.com/Gero1999/sAMRat/blob/main/CONTRIBUTING.md) file in the repository.**
+
+## Quick Overview
+
+This page provides a quick overview of how to contribute. For detailed information, always refer to the official [CONTRIBUTING.md](https://github.com/Gero1999/sAMRat/blob/main/CONTRIBUTING.md) document.
+
+## How to Contribute
+
+### 1. Reporting Issues
+
+Found a bug or have a feature request? 
+
+- Visit our [GitHub Issues](https://github.com/Gero1999/sAMRat/issues) page
+- Check if a similar issue already exists
+- If not, create a new issue with:
+  - Clear description of the problem or feature
+  - Minimal reproducible example (for bugs)
+  - Expected vs. actual behavior
+  - System information (R version, OS, etc.)
+
+### 2. Making Code Contributions
+
+#### Getting Started
+
+1. **Fork the repository** on GitHub
+2. **Clone your fork** locally:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/sAMRat.git
+   cd sAMRat
+   ```
+3. **Create a branch** with a descriptive name:
+   ```bash
+   git checkout -b X-feature/your-short-desc
+   # or
+   git checkout -b X-fix/your-short-desc
+   ```
+   Replace `X` with the respective issue number.
+
+#### Development Workflow
+
+1. **Make your changes** in small, focused commits
+2. **Document your code** using roxygen2 comments
+3. **Add tests** for new functionality
+4. **Run checks** to ensure everything works:
+
+```{r eval=FALSE}
+# Load the package
+devtools::load_all()
+
+# Run tests
+devtools::test()
+
+# Run package checks
+devtools::check()
+
+# Update documentation
+roxygen2::roxygenise()
+```
+
+#### Coding Style
+
+- Follow **tidyverse style** for R code
+- Keep functions small and focused
+- Use meaningful variable and function names
+- Comment complex logic
+- Maintain consistent indentation
+
+### 3. Submitting Pull Requests
+
+When you're ready to submit your changes:
+
+1. **Push your branch** to your fork
+2. **Open a Pull Request** against the `main` branch
+3. **Describe your changes**:
+   - What problem does it solve?
+   - How did you test it?
+   - Any breaking changes?
+4. **Wait for review** - maintainers will review and provide feedback
+
+#### Pull Request Checklist
+
+Before submitting, ensure:
+
+- [ ] PR targets the `main` branch
+- [ ] Code follows the project style
+- [ ] Tests added/updated and passing
+- [ ] Documentation updated
+- [ ] `devtools::check()` passes with no new errors or warnings
+- [ ] Commit messages are clear and descriptive
+
+## Types of Contributions Needed
+
+We welcome contributions in many areas:
+
+### Code Contributions
+
+- **New Features**: Additional analysis methods, visualizations, or export formats
+- **Bug Fixes**: Fix reported issues or edge cases
+- **Performance**: Optimize existing code for better performance
+- **Refactoring**: Improve code structure and maintainability
+
+### Documentation Contributions
+
+- **Improve Vignettes**: Enhance existing tutorials or add new ones
+- **Function Documentation**: Improve roxygen2 documentation
+- **Examples**: Add practical examples to function documentation
+- **Website**: Enhance the pkgdown website
+
+### Testing Contributions
+
+- **Unit Tests**: Increase test coverage
+- **Integration Tests**: Test component interactions
+- **Edge Cases**: Test boundary conditions and error handling
+
+## Development Environment Setup
+
+### Required Tools
+
+```{r eval=FALSE}
+# Install development tools
+install.packages(c(
+  "devtools",      # Development tools
+  "testthat",      # Testing framework
+  "roxygen2",      # Documentation
+  "pkgdown",       # Website generation
+  "lintr"          # Code linting
+))
+```
+
+### Running the Application Locally
+
+```{r eval=FALSE}
+# Load the package
+devtools::load_all()
+
+# Run the Shiny app
+shiny::runApp(system.file("shiny/app", package = "sAMRat"))
+```
+
+## Code Review Process
+
+All contributions go through code review:
+
+1. **Automated Checks**: CI/CD runs automated tests and checks
+2. **Maintainer Review**: Core maintainers review the code
+3. **Feedback Loop**: Address any requested changes
+4. **Merge**: Once approved, your PR will be merged
+
+## Community Guidelines
+
+Please follow our [Code of Conduct](https://github.com/Gero1999/sAMRat/blob/main/CODE_OF_CONDUCT.md):
+
+- Be respectful and inclusive
+- Welcome newcomers
+- Focus on constructive feedback
+- Assume good intentions
+
+## Getting Help
+
+Need help contributing?
+
+- **Questions**: Open a [GitHub Discussion](https://github.com/Gero1999/sAMRat/discussions) or issue
+- **Email**: Contact the maintainer listed in [DESCRIPTION](https://github.com/Gero1999/sAMRat/blob/main/DESCRIPTION)
+- **Documentation**: Read the [Architecture](architecture.html) guide to understand the codebase
+
+## Recognition
+
+Contributors are recognized in:
+
+- The package DESCRIPTION file (for significant contributions)
+- Release notes and changelogs
+- The project README
+
+## Resources
+
+### Internal Resources
+
+- [Architecture Guide](architecture.html) - Understand the codebase structure
+- [Getting Started](getting-started.html) - Learn how to use the package
+- [Official CONTRIBUTING.md](https://github.com/Gero1999/sAMRat/blob/main/CONTRIBUTING.md) - Complete contribution guidelines
+
+### External Resources
+
+- [R Packages Book](https://r-pkgs.org/) - Comprehensive guide to R package development
+- [Tidyverse Style Guide](https://style.tidyverse.org/) - R coding style guidelines
+- [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-exts.html) - Official R documentation
+- [Advanced R](https://adv-r.hadley.nz/) - Deep dive into R programming
+
+## Thank You!
+
+Every contribution, no matter how small, helps improve sAMRat. We appreciate your time and effort in making this project better for everyone!
+
+---
+
+**Remember**: For the most current and detailed contribution guidelines, always refer to the [CONTRIBUTING.md](https://github.com/Gero1999/sAMRat/blob/main/CONTRIBUTING.md) file in the repository.
