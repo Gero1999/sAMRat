@@ -12,6 +12,8 @@ source("modules/modal_settings.R")
 source("modules/modal_help.R")
 source("modules/tab_results.R")
 
+source("modules/antibiogram_module.R")
+
 ui <- fluidPage(
   theme = bs_theme(version = 4, bootswatch = "flatly"),
   tags$head(
@@ -46,8 +48,8 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   # call data tab module
   amr_obj <- tab_data_server("data")
-  # call results module
-  tab_results_server("results")
+  # call results module - pass the reactive returned by data module
+  tab_results_server("results", amr_obj = amr_obj)
 
   # Modal messages activated by action buttons
   settings <- modal_settings_server("settings", trigger = reactive(input$settings_button))

@@ -18,6 +18,7 @@ tab_results_ui <- function(id) {
       ),
       tabPanel("Antibiograms",
         br(),
+        antibiogram_ui(ns("antibiogram")),
         p("Antibiograms coming soon")  # Placeholder for future implementation
       ),
       tabPanel("MDR",
@@ -30,19 +31,9 @@ tab_results_ui <- function(id) {
 
 #' Server logic for Results tab
 #' @param id module id
-tab_results_server <- function(id) {
+tab_results_server <- function(id, amr_obj) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    # reactive that provides the mapped amr_obj (if any)
-    amr_obj <- reactive({
-      # session$userData$amr_obj is set in the data module as a reactiveVal
-      if (!is.null(session$userData$amr_obj) && is.reactive(session$userData$amr_obj)) {
-        session$userData$amr_obj()
-      } else {
-        NULL
-      }
-    })
 
     # Summary results: small textual summary
     output$summary <- renderText({
@@ -57,5 +48,8 @@ tab_results_server <- function(id) {
       if (is.null(ao) || is.null(ao$data)) return(NULL)
       DT::datatable(ao$data, options = list(pageLength = 10))
     })
+
+    # Render antibiogram module using the reactive amr_obj (pass the reactive)
+    antibiogram_server(amr_obj = amr_obj, id = "antibiogram")
   })
 }
