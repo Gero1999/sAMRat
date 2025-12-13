@@ -92,6 +92,8 @@ tab_data_server <- function(id) {
       datatable(data(), options = list(pageLength = 5))
     })
 
+    amr_obj <- reactiveVal(NULL)
+
     # Do Mapping button logic (delegates to create_amr_obj)
     observeEvent(input$do_mapping, {
       req(data())
@@ -122,10 +124,9 @@ tab_data_server <- function(id) {
         return(NULL)
       })
 
-      if (is.null(amr_obj)) return()
+      amr_obj(amr_obj)
 
-      # Expose amr_obj for potential further modules via reactiveVal in session$userData
-      session$userData$amr_obj <- reactiveVal(amr_obj)
+      if (is.null(amr_obj)) return()
 
       # Show summary of amr_obj
       result <- tryCatch({
@@ -144,8 +145,6 @@ tab_data_server <- function(id) {
     })
 
     # Return a reactive to let the main app (or other modules) access the mapped object if needed
-    return(list(
-      amr_obj = reactive({ session$userData$amr_obj() })
-    ))
+    return(amr_obj)
   })
 }
