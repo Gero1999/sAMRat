@@ -21,6 +21,10 @@ tab_results_ui <- function(id) {
         antibiogram_ui(ns("antibiogram")),
         p("Antibiograms coming soon")  # Placeholder for future implementation
       ),
+      tabPanel("PCA",
+        br(),
+        pca_ui(ns("pca"))
+      ),
       tabPanel("MDR",
         br(),
         p("MDR analysis coming soon")  # Placeholder for future implementation
@@ -51,5 +55,8 @@ tab_results_server <- function(id, amr_obj) {
 
     # Render antibiogram module using the reactive amr_obj (pass the reactive)
     antibiogram_server(amr_obj = amr_obj, id = "antibiogram")
+
+    # Render PCA module
+    pca_server(amr_obj = amr_obj, id = "pca")
   })
 }

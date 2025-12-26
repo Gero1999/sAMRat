@@ -12,6 +12,7 @@ source("modules/modal_settings.R")
 source("modules/modal_help.R")
 source("modules/tab_results.R")
 
+source("modules/pca_module.R")
 source("modules/antibiogram_module.R")
 
 ui <- fluidPage(
