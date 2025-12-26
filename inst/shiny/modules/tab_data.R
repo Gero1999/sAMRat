@@ -43,14 +43,18 @@ tab_data_server <- function(id) {
       # 4) Date columns: class is Date or POSIXct
       date_cols <- cols[sapply(df, function(x) inherits(x, c("Date", "POSIXct")))]
       # 5) Subject columns: name matches subject, subjid, usubjid (case-insensitive)
-      subject_pattern <- "^(subject|subjid|usubjid)$"
+      subject_pattern <- "^(subject|subjid|usubjid|patient).*$"
       subject_cols <- cols[grepl(subject_pattern, tolower(cols))]
+      # 6) Microorganism column
+      mo_pattern <- "^(mo|microorganism|microbe|bacteria|organism).*$"
+      mo_cols <- cols[grepl(mo_pattern, tolower(cols))]
       list(
         sir_cols = sir_cols,
         mic_cols = mic_cols,
         disk_cols = disk_cols,
         date_col = if (length(date_cols) > 0) date_cols[1] else NULL,
-        subject_col = if (length(subject_cols) > 0) subject_cols[1] else NULL
+        subject_col = if (length(subject_cols) > 0) subject_cols[1] else NULL,
+        mo_col = if (length(mo_cols) > 0) mo_cols[1] else NULL
       )
     }
 
@@ -76,13 +80,13 @@ tab_data_server <- function(id) {
       cols <- names(data())
       detected <- auto_detect_columns(data())
       tagList(
-        selectInput(session$ns("mo_col"), "Microorganism column (mo)", choices = cols),
+        selectInput(session$ns("mo_col"), "Microorganism column (mo)", choices = cols, selected = if(!is.null(detected$mo_col)) detected$mo_col else NULL),
         selectizeInput(session$ns("sir_col"), "SIR column(s) (ab_sir)", choices = cols, multiple = TRUE, selected = detected$sir_cols),
-        selectizeInput(session$ns("mic_col"), "MIC column(s) (ab_mic)", choices = c("None", cols), multiple = TRUE, selected = if(length(detected$mic_cols)>0) detected$mic_cols else "None"),
-        selectizeInput(session$ns("disk_col"), "Disk column(s) (ab_disk)", choices = c("None", cols), multiple = TRUE, selected = if(length(detected$disk_cols)>0) detected$disk_cols else "None"),
-        selectInput(session$ns("date_col"), "Date column", choices = c("None", cols), selected = if(!is.null(detected$date_col)) detected$date_col else "None"),
-        selectInput(session$ns("subject_col"), "Subject column", choices = c("None", cols), selected = if(!is.null(detected$subject_col)) detected$subject_col else "None"),
-        selectInput(session$ns("other_col"), "Other column", choices = c("None", cols))
+        selectizeInput(session$ns("mic_col"), "MIC column(s) (ab_mic)", choices = cols, multiple = TRUE, selected = if(length(detected$mic_cols)>0) detected$mic_cols else NULL),
+        selectizeInput(session$ns("disk_col"), "Disk column(s) (ab_disk)", choices = cols, multiple = TRUE, selected = if(length(detected$disk_cols)>0) detected$disk_cols else NULL),
+        selectInput(session$ns("date_col"), "Date column", choices = c("Optionally add the collection date" = "", cols), selected = if(!is.null(detected$date_col)) detected$date_col else NULL),
+        selectInput(session$ns("subject_col"), "Subject column", choices = cols, selected = if(!is.null(detected$subject_col)) detected$subject_col else NULL),
+        selectInput(session$ns("other_col"), "Other column", c("Other columns you may like to use for grouping" = "", cols), selected = "")
       )
     })
 
