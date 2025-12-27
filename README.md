@@ -42,7 +42,7 @@ To run the application, simply invoke:
 
 ```R
 devtools::load_all()
-shiny::runApp(system.file("shiny/app", package = "sAMRat"))
+shiny::runApp(system.file("shiny/app.R", package = "sAMRat"))
 ```
 
 ## Contributing
