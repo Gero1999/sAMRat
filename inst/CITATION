@@ -1,0 +1,45 @@
+citHeader("To cite sAMRat in publications use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "sAMRat: Shiny Antimicrobial Resistance (AMR) Analysis Tool",
+  author   = c(person("Gerardo Jose", "Rodriguez",
+                      email = "gerardo.jrac@gmail.com",
+                      comment = c(ORCID = "0000-0003-1413-0060"))),
+  year     = 2024,
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/Gero1999/sAMRat",
+  textVersion = paste(
+    "Rodriguez, G.J. (2024).",
+    "sAMRat: Shiny Antimicrobial Resistance (AMR) Analysis Tool.",
+    "R package version 0.1.0.",
+    "https://github.com/Gero1999/sAMRat"
+  )
+)
+
+citFooter("This package depends on the AMR package. Please also cite:")
+
+bibentry(
+  bibtype  = "Article",
+  title    = "AMR: An R Package for Working with Antimicrobial Resistance Data",
+  author   = c(
+    person("Matthijs S.", "Berends"),
+    person("Christian F.", "Luz"),
+    person("Alex W.", "Friedrich"),
+    person("Bhanu N.M.", "Sinha"),
+    person("Casper J.", "Albers"),
+    person("Corinna", "Glasner")
+  ),
+  journal  = "Journal of Statistical Software",
+  year     = 2022,
+  volume   = 104,
+  number   = 3,
+  pages    = "1--31",
+  doi      = "10.18637/jss.v104.i03",
+  textVersion = paste(
+    "Berends MS, Luz CF, Friedrich AW, Sinha BNM, Albers CJ, Glasner C (2022).",
+    "AMR: An R Package for Working with Antimicrobial Resistance Data.",
+    "Journal of Statistical Software, 104(3), 1-31.",
+    "doi:10.18637/jss.v104.i03"
+  )
+)
