@@ -4,7 +4,8 @@
 <br/>
 <br/>
 
-> An Open Source Shiny Application that uses the `AMR` package to facilitate Antimicrobial Resistance Data Analysis and Reporting.
+> An Open Source Shiny Application that uses the `AMR` package to facilitate Antimicrobial Resistance Data Analysis and Reporting. Free. Smarter. And built for everyone.
+
 <br/>
 
 ## Description
