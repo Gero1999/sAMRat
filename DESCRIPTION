@@ -3,10 +3,10 @@ Type: Package
 Title: Shiny Antimicrobial Resistance (AMR) Analysis Tool
 Version: 0.1.0
 Authors@R: c(
-        person(
-          "Gerardo Jose", "Rodriguez", email = "gerardo.jrac@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-1413-0060")
-        ),
+    person(
+        "Gerardo Jose", "Rodriguez", email = "gerardo.jrac@gmail.com", role = c("aut", "cre"),
+        comment = c(ORCID = "0000-0003-1413-0060")
+    )
   )
 Description: A 'shiny' application to perform antimicrobial resistance data analysis
     and generate reports with visualizations and statistics. It uses the 'AMR'
