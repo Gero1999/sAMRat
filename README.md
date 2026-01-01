@@ -54,5 +54,5 @@ Check our [contributing guidelines](https://github.com/Gero1999/sAMRat/CONTRIBUT
 
 ## Documentation and references
 
-- Go to [our Website - yet not available]() for further information.
+- Visit our [Website](https://gero1999.github.io/sAMRat/) for comprehensive documentation, tutorials, and guides.
 - The main package the App depends on is `AMR`. You can find more of it on its [website](https://amr-for-r.org/index.html)
