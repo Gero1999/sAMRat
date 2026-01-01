@@ -11,7 +11,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, reference, articles, news]
+    left:  [intro, reference, articles]
     right: [search, github]
   components:
     home:
@@ -25,13 +25,9 @@ navbar:
       menu:
       - text: Get Started
         href: articles/getting-started.html
-      - text: Architecture
-        href: articles/architecture.html
-      - text: Contributing
-        href: articles/contributing.html
-    news:
-      text: Changelog
-      href: news/index.html
+    # news:
+    #   text: Changelog
+    #   href: news/index.html
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/Gero1999/sAMRat
@@ -61,11 +57,6 @@ articles:
   navbar: ~
   contents:
   - getting-started
-- title: Developer Resources
-  navbar: ~
-  contents:
-  - architecture
-  - contributing
 
 authors:
   Gerardo Jose Rodriguez:
