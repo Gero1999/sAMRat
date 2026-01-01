@@ -4,7 +4,8 @@
 <br/>
 <br/>
 
-> An Open Source Shiny Application that uses the `AMR` package to facilitate Antimicrobial Resistance Data Analysis and Reporting.
+> An Open Source Shiny Application that uses the `AMR` package to facilitate Antimicrobial Resistance Data Analysis and Reporting. Free, smart and for everyone.
+
 <br/>
 
 ## Description
@@ -42,7 +43,7 @@ To run the application, simply invoke:
 
 ```R
 devtools::load_all()
-shiny::runApp(system.file("shiny/app", package = "sAMRat"))
+shiny::runApp(system.file("shiny/app.R", package = "sAMRat"))
 ```
 
 ## Contributing
