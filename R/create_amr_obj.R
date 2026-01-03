@@ -367,13 +367,13 @@ create_amr_obj <- function(df,
       amr_df
     })
   }
-  
+
   amr_obj <- list(data = amr_df)
-  
+
   # Produce additional properties for the microorganism column (mo)
   if (!is.null(mo_col) && mo_col %in% names(amr_df)) {
-    mo_vals <- amr_df[[mo_col]]
-    
+    mo_vals <- unique(amr_df[[mo_col]])
+
     amr_obj$mo <- list(
       naming = data.frame(
         mo = mo_vals,
@@ -402,6 +402,9 @@ create_amr_obj <- function(df,
         mo = mo_vals,
         gbif = mo_gbif(mo_vals),
         url = mo_url(mo_vals)
+      ),
+      columns = list(
+        mo = mo_col
       )
     )
   }
@@ -434,9 +437,39 @@ create_amr_obj <- function(df,
         ddd_iv_units = ab_info$ddd$iv$units
       ),
       atc = ab_info$atc,
-      tradenames <- ab_info$tradenames,
-      loinc <- ab_info$loinc
+      tradenames = ab_info$tradenames,
+      loinc = ab_info$loinc,
+      columns = list(
+        sir = sir_cols,
+        mic = mic_cols,
+        disk = disk_cols
+      )
     )
   }
   return(amr_obj)
+}
+
+#' Merge selected microorganism metadata into amr_obj$data
+#'
+#' @param amr_obj An object as returned by create_amr_obj()
+#' @param mo_dfs Character vector of mo metadata to merge (e.g., c("naming", "traits"))
+#' @return The data.frame with selected mo metadata columns merged in
+#' @export
+merge_mo_info <- function(amr_obj, mo_dfs = c("naming", "traits")) {
+  stopifnot(is.list(amr_obj), !is.null(amr_obj$data), !is.null(amr_obj$mo))
+  data <- amr_obj$data
+  mo_col <- amr_obj$mo$columns$mo
+  for (df_name in mo_dfs) {
+    if (!is.null(amr_obj$mo[[df_name]])) {
+      data <- merge(
+        data,
+        amr_obj$mo[[df_name]],
+        by.x = mo_col,
+        by.y = "mo",
+        all.x = TRUE,
+        suffixes = c("", paste0("_", df_name))
+      )
+    }
+  }
+  data
 }
