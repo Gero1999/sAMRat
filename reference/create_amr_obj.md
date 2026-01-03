@@ -176,6 +176,11 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> Escherichia coli           https://lpsn.dsmz.de/species/escherichia-coli
 #> Staphylococcus aureus https://lpsn.dsmz.de/species/staphylococcus-aureus
 #> 
+#> $mo$columns
+#> $mo$columns$mo
+#> [1] "mo"
+#> 
+#> 
 #> 
 #> $ab
 #> $ab$group
@@ -191,7 +196,7 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> $ab$atc
 #> [1] "J01CA01"  "QJ01CA01" "QJ51CA01" "QS01AA19" "S01AA19" 
 #> 
-#> $ab[[4]]
+#> $ab$tradenames
 #>  [1] "adobacillin"     "alpen"           "amblosin"        "amcap"          
 #>  [5] "amcill"          "amfipen"         "ampen"           "amperil"        
 #>  [9] "ampichel"        "ampicilina"      "ampicillina"     "ampicilline"    
@@ -217,11 +222,22 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> [89] "ultrabron"       "vampen"          "viccillin"       "vidocillin"     
 #> [93] "wypicil"        
 #> 
-#> $ab[[5]]
+#> $ab$loinc
 #>  [1] "101477-8" "101478-6" "18864-9"  "18865-6"  "20374-5"  "21066-6" 
 #>  [7] "23618-2"  "27-3"     "28-1"     "29-9"     "30-7"     "31-5"    
 #> [13] "32-3"     "33-1"     "3355-5"   "33562-0"  "33919-2"  "34-9"    
 #> [19] "43883-8"  "43884-6"  "6979-9"   "6980-7"   "87604-5" 
+#> 
+#> $ab$columns
+#> $ab$columns$sir
+#> [1] "AMP"
+#> 
+#> $ab$columns$mic
+#> NULL
+#> 
+#> $ab$columns$disk
+#> NULL
+#> 
 #> 
 #> 
 
@@ -272,6 +288,11 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> Escherichia coli           https://lpsn.dsmz.de/species/escherichia-coli
 #> Staphylococcus aureus https://lpsn.dsmz.de/species/staphylococcus-aureus
 #> 
+#> $mo$columns
+#> $mo$columns$mo
+#> [1] "mo"
+#> 
+#> 
 #> 
 #> $ab
 #> $ab$group
@@ -287,7 +308,7 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> $ab$atc
 #> [1] "J01CA01"  "QJ01CA01" "QJ51CA01" "QS01AA19" "S01AA19" 
 #> 
-#> $ab[[4]]
+#> $ab$tradenames
 #>  [1] "adobacillin"     "alpen"           "amblosin"        "amcap"          
 #>  [5] "amcill"          "amfipen"         "ampen"           "amperil"        
 #>  [9] "ampichel"        "ampicilina"      "ampicillina"     "ampicilline"    
@@ -313,11 +334,22 @@ if (requireNamespace("AMR", quietly = TRUE)) {
 #> [89] "ultrabron"       "vampen"          "viccillin"       "vidocillin"     
 #> [93] "wypicil"        
 #> 
-#> $ab[[5]]
+#> $ab$loinc
 #>  [1] "101477-8" "101478-6" "18864-9"  "18865-6"  "20374-5"  "21066-6" 
 #>  [7] "23618-2"  "27-3"     "28-1"     "29-9"     "30-7"     "31-5"    
 #> [13] "32-3"     "33-1"     "3355-5"   "33562-0"  "33919-2"  "34-9"    
 #> [19] "43883-8"  "43884-6"  "6979-9"   "6980-7"   "87604-5" 
+#> 
+#> $ab$columns
+#> $ab$columns$sir
+#> [1] "AMP"
+#> 
+#> $ab$columns$mic
+#> NULL
+#> 
+#> $ab$columns$disk
+#> NULL
+#> 
 #> 
 #> 
 ```
