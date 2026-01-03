@@ -12,10 +12,6 @@ tab_results_ui <- function(id) {
         br(),
         DT::DTOutput(ns("full_table"))
       ),
-      tabPanel("Summary results",
-        br(),
-        textOutput(ns("summary"))
-      ),
       tabPanel("Antibiograms",
         br(),
         antibiogram_ui(ns("antibiogram")),
@@ -38,13 +34,6 @@ tab_results_ui <- function(id) {
 tab_results_server <- function(id, amr_obj) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    # Summary results: small textual summary
-    output$summary <- renderText({
-      ao <- amr_obj()
-      if (is.null(ao) || is.null(ao$data)) return("No mapped object available yet. Please run 'Do Mapping' in the Data tab.")
-      summary(ao$data)
-    })
 
     # Full dataset table
     output$full_table <- DT::renderDT({
