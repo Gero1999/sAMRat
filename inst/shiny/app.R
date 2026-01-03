@@ -14,6 +14,7 @@ source("modules/tab_results.R")
 
 source("modules/pca_module.R")
 source("modules/antibiogram_module.R")
+source("modules/mdr_module.R")
 
 ui <- fluidPage(
   theme = bs_theme(version = 4, bootswatch = "flatly"),

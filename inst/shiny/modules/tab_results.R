@@ -19,7 +19,7 @@ tab_results_ui <- function(id) {
       tabPanel("Antibiograms",
         br(),
         antibiogram_ui(ns("antibiogram")),
-        p("Antibiograms coming soon")  # Placeholder for future implementation
+        p("Antibiograms coming soon")
       ),
       tabPanel("PCA",
         br(),
@@ -27,7 +27,7 @@ tab_results_ui <- function(id) {
       ),
       tabPanel("MDR",
         br(),
-        p("MDR analysis coming soon")  # Placeholder for future implementation
+        mdr_ui(ns("mdr"))
       )
     )
   )
@@ -58,5 +58,8 @@ tab_results_server <- function(id, amr_obj) {
 
     # Render PCA module
     pca_server(amr_obj = amr_obj, id = "pca")
+
+    # Render MDR module
+    mdr_server(id = "mdr", amr_obj = amr_obj)
   })
 }
