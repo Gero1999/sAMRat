@@ -1,0 +1,206 @@
+# sAMRat Architecture
+
+## Overview
+
+This document describes the architecture and structure of the **sAMRat**
+(Shiny Antimicrobial Resistance Analysis Tool) package. Understanding
+the architecture will help contributors navigate the codebase and
+implement new features effectively.
+
+## Package Structure
+
+The sAMRat package follows standard R package conventions with some
+additional structure for the Shiny application:
+
+    sAMRat/
+    ├── R/                      # R functions and core logic
+    │   └── create_amr_obj.R    # Core AMR object creation
+    ├── inst/                   # Installed files
+    │   └── shiny/              # Shiny application files
+    │       ├── app.R           # Main Shiny app
+    │       └── modules/        # Shiny modules
+    │           ├── modal_help.R
+    │           ├── modal_settings.R
+    │           ├── tab_data.R
+    │           └── tab_results.R
+    ├── man/                    # Documentation (auto-generated)
+    ├── tests/                  # Unit tests
+    │   └── testthat/
+    ├── vignettes/              # Long-form documentation
+    ├── DESCRIPTION             # Package metadata
+    ├── NAMESPACE               # Exported functions
+    └── README.md               # Main documentation
+
+## Core Components
+
+### 1. R Functions (`R/`)
+
+The `R/` directory contains the core R functions that provide the
+underlying functionality:
+
+- **`create_amr_obj.R`**: The main function for creating AMR-compatible
+  data objects. This function bridges the gap between user data and the
+  AMR package’s expected format.
+
+These functions can be used independently of the Shiny application,
+making the package useful for both interactive and programmatic use
+cases.
+
+### 2. Shiny Application (`inst/shiny/`)
+
+The Shiny application is organized using a modular structure for
+maintainability and scalability:
+
+#### Main Application File
+
+- **`app.R`**: The entry point for the Shiny application. It coordinates
+  the UI and server logic, initializing all modules and setting up the
+  application structure.
+
+#### Modules (`modules/`)
+
+The application uses Shiny modules to separate concerns and create
+reusable components:
+
+- **`tab_data.R`**: Handles data upload, import, and initial processing.
+  This module manages:
+
+  - File upload functionality
+  - Data preview
+  - Column mapping interface
+
+- **`tab_results.R`**: Manages the analysis results and visualizations.
+  Features include:
+
+  - Statistical summaries
+  - Interactive plots
+  - Export functionality
+
+- **`modal_help.R`**: Provides contextual help and documentation within
+  the application
+
+- **`modal_settings.R`**: Manages application settings and user
+  preferences
+
+This modular architecture allows for: - Easy maintenance and debugging -
+Reusable components across different parts of the application - Clear
+separation of concerns - Simplified testing
+
+### 3. Tests (`tests/`)
+
+The package includes unit tests using the `testthat` framework:
+
+- Tests are located in `tests/testthat/`
+- Each test file follows the naming convention `test-*.R`
+- Currently includes tests for
+  [`create_amr_obj()`](https://gero1999.github.io/sAMRat/reference/create_amr_obj.md)
+  function
+
+To run tests:
+
+``` r
+devtools::test()
+```
+
+### 4. Documentation (`man/` and `vignettes/`)
+
+Documentation is managed through:
+
+- **`man/`**: Auto-generated function documentation using roxygen2
+- **`vignettes/`**: Long-form articles and tutorials
+  - Getting Started guide
+  - Architecture overview (this document)
+  - Contributing guidelines
+
+## Data Flow
+
+The typical data flow through the application:
+
+1.  **Data Upload** → User uploads raw microbiological data
+2.  **Data Mapping** → User maps columns to AMR-expected format
+3.  **Object Creation** →
+    [`create_amr_obj()`](https://gero1999.github.io/sAMRat/reference/create_amr_obj.md)
+    creates AMR-compatible object
+4.  **Analysis** → AMR package functions process the data
+5.  **Visualization** → Results displayed in interactive plots and
+    tables
+6.  **Export** → Results exported in various formats
+
+## Dependencies
+
+### Core Dependencies
+
+- **AMR**: The foundation package for antimicrobial resistance analysis
+- **dplyr**: Data manipulation and transformation
+- **ggplot2**: Data visualization
+- **shiny**: Interactive web application framework
+
+### Development Dependencies
+
+- **testthat**: Unit testing framework
+- **roxygen2**: Documentation generation
+- **devtools**: Development tools
+- **pkgdown**: Website generation
+
+## Design Principles
+
+The sAMRat architecture follows these key principles:
+
+1.  **Modularity**: Components are separated into modules for
+    maintainability
+2.  **Reusability**: Core functions can be used independently of the
+    Shiny app
+3.  **User-Friendly**: Interactive interface reduces the learning curve
+    for AMR analysis
+4.  **Extensibility**: New features and modules can be easily added
+5.  **Standards Compliance**: Follows R package development best
+    practices
+6.  **Testing**: Comprehensive test coverage for reliability
+
+## Adding New Features
+
+When adding new features to sAMRat:
+
+1.  **For new analyses**: Add functions to the `R/` directory with
+    appropriate documentation
+2.  **For UI components**: Create new modules in `inst/shiny/modules/`
+3.  **For documentation**: Add vignettes to explain complex features
+4.  **For testing**: Add corresponding tests in `tests/testthat/`
+
+Always follow the existing code style and patterns to maintain
+consistency.
+
+## Performance Considerations
+
+- The application is designed to handle typical clinical laboratory
+  datasets
+- For very large datasets, consider implementing:
+  - Data sampling for previews
+  - Lazy loading strategies
+  - Progress indicators for long-running operations
+  - Caching of computed results
+
+## Future Architecture Plans
+
+Potential areas for expansion:
+
+- Integration with additional AMR analysis packages
+- Database connectivity for large datasets
+- RESTful API for programmatic access
+- Docker containerization for easy deployment
+- Additional visualization options
+- Batch processing capabilities
+
+## Contributing to the Architecture
+
+When proposing architectural changes:
+
+1.  Open an issue to discuss the change
+2.  Consider backward compatibility
+3.  Update this document to reflect changes
+4.  Ensure all tests pass
+5.  Add new tests for new components
+
+See the [Contributing
+Guide](https://gero1999.github.io/sAMRat/articles/CONTRIBUTING.md) for
+more details.
