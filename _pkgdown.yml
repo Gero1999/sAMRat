@@ -59,6 +59,10 @@ articles:
   navbar: ~
   contents:
   - getting-started
+- title: Architecture
+  navbar: ~
+  contents:
+  - architecture
 
 authors:
   Gerardo Jose Rodriguez:
