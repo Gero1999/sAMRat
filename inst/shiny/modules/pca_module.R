@@ -42,8 +42,9 @@ pca_server <- function(amr_obj, id) {
       # Merge mo information
       mo_info <- amr_obj()$mo
       mo_col <- amr_obj()$mo$columns$mo
+
       data <- merge(data, mo_info[["traits"]], by.x = mo_col, by.y = "mo", all.x = TRUE)
-      data <- merge(data, cbind(mo_info[["taxonomy"]]), by.x = mo_col, by.y = "mo", all.x = TRUE)
+      data <- merge(data, mo_info[["taxonomy"]], by.x = mo_col, by.y = "mo", all.x = TRUE)
       data
     })
 
@@ -64,7 +65,7 @@ pca_server <- function(amr_obj, id) {
       data() %>%
       group_by(!!!syms(input$group_column)) %>%
       summarize_if(is.sir, resistance) %>%
-      select(any_of(input$ab_cols)) %>%
+      select(any_of(c(input$ab_cols, input$group_column))) %>%
       pca()
     })
 

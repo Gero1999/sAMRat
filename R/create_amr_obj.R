@@ -372,7 +372,7 @@ create_amr_obj <- function(df,
 
   # Produce additional properties for the microorganism column (mo)
   if (!is.null(mo_col) && mo_col %in% names(amr_df)) {
-    mo_vals <- amr_df[[mo_col]]
+    mo_vals <- unique(amr_df[[mo_col]])
 
     amr_obj$mo <- list(
       naming = data.frame(
