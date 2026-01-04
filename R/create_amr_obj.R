@@ -47,7 +47,7 @@
 #'   avoid hard failures for partial or unexpected inputs.
 #'
 #' @examples
-#' 
+#'
 #' # Minimal example (requires the AMR package):
 #' if (requireNamespace("AMR", quietly = TRUE)) {
 #'   df <- data.frame(
@@ -74,42 +74,62 @@ create_amr_obj <- function(df,
                            filter_first_isolate = FALSE) {
   stopifnot(is.data.frame(df))
   amr_df <- df
-  
+
   # helper to check existence
   has_col <- function(x) !is.null(x) && x %in% names(amr_df)
-  
+
   # MO column
   if (!is.null(mo_col) && mo_col %in% names(amr_df)) {
-    try({amr_df[[mo_col]] <- as.mo(amr_df[[mo_col]])}, silent = TRUE)
+    try(
+      {
+        amr_df[[mo_col]] <- as.mo(amr_df[[mo_col]])
+      },
+      silent = TRUE
+    )
   }
-  
+
   # SIR columns
   if (!is.null(sir_cols) && length(sir_cols) > 0) {
     for (col in sir_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.sir(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.sir(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # MIC columns
   if (!is.null(mic_cols) && length(mic_cols) > 0) {
     for (col in mic_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.mic(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.mic(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # Disk columns
   if (!is.null(disk_cols) && length(disk_cols) > 0) {
     for (col in disk_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.disk(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.disk(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # Date column: try to coerce to Date with common formats
   if (!is.null(date_col) && date_col != "None" && date_col %in% names(amr_df)) {
     d <- amr_df[[date_col]]
@@ -122,37 +142,40 @@ create_amr_obj <- function(df,
       if (inherits(parsed, "try-error") || all(is.na(parsed))) {
         parsed <- try(as.Date(d, format = "%d/%m/%Y"), silent = TRUE)
       }
-      if (!(inherits(parsed, "try-error")) ) {
+      if (!(inherits(parsed, "try-error"))) {
         amr_df[[date_col]] <- parsed
       }
     }
   }
-  
+
   # Subject column -> SUBJID factor
   if (!is.null(subject_col) && subject_col != "None" && subject_col %in% names(amr_df)) {
     amr_df$SUBJID <- as.factor(amr_df[[subject_col]])
   }
-  
+
   # Optional: filter first isolate per patient x microorganism (earliest date)
   if (isTRUE(filter_first_isolate)) {
-    amr_df <- tryCatch({
-      amr_df %>%
-        dplyr::filter(
-          first_isolate(col_mo = mo_col, col_date = date_col, col_subjid = "SUBJID")
-        )
-    }, error = function(e) {
-      warning(sprintf("first_isolate filter failed: %s", e$message), call. = FALSE)
-      # return unfiltered data so the rest of the processing continues
-      amr_df
-    })
+    amr_df <- tryCatch(
+      {
+        amr_df %>%
+          dplyr::filter(
+            first_isolate(col_mo = mo_col, col_date = date_col, col_subjid = "SUBJID")
+          )
+      },
+      error = function(e) {
+        warning(sprintf("first_isolate filter failed: %s", e$message), call. = FALSE)
+        # return unfiltered data so the rest of the processing continues
+        amr_df
+      }
+    )
   }
-  
+
   amr_obj <- list(data = amr_df)
-  
+
   # Produce additional properties for the microorganism column (mo)
   if (!is.null(mo_col) && mo_col %in% names(amr_df)) {
     mo_vals <- amr_df[[mo_col]]
-    
+
     amr_obj$mo <- list(
       naming = data.frame(
         mo = mo_vals,
@@ -184,17 +207,19 @@ create_amr_obj <- function(df,
       )
     )
   }
-  
+
   # Produce additional properties for the antibiotic columns (ab)
   ab_cols <- c(sir_cols, mic_cols, disk_cols)
   ab_cols <- unique(ab_cols[!ab_cols %in% c(NULL, "None")])
   if (!is.null(ab_cols)) {
     ab_vals <- as.ab(ab_cols)
     col_types <- ifelse(ab_cols %in% sir_cols, "SIR",
-                        ifelse(ab_cols %in% mic_cols, "MIC",
-                               ifelse(ab_cols %in% disk_cols, "Disk", NA)))
+      ifelse(ab_cols %in% mic_cols, "MIC",
+        ifelse(ab_cols %in% disk_cols, "Disk", NA)
+      )
+    )
     ab_info <- ab_info(ab_vals)
-    
+
     amr_obj$ab <- list(
       group = data.frame(
         col = ab_cols,
@@ -268,7 +293,7 @@ create_amr_obj <- function(df,
 #'   avoid hard failures for partial or unexpected inputs.
 #'
 #' @examples
-#' 
+#'
 #' # Minimal example (requires the AMR package):
 #' if (requireNamespace("AMR", quietly = TRUE)) {
 #'   df <- data.frame(
@@ -295,42 +320,62 @@ create_amr_obj <- function(df,
                            filter_first_isolate = FALSE) {
   stopifnot(is.data.frame(df))
   amr_df <- df
-  
+
   # helper to check existence
   has_col <- function(x) !is.null(x) && x %in% names(amr_df)
-  
+
   # MO column
   if (!is.null(mo_col) && mo_col %in% names(amr_df)) {
-    try({amr_df[[mo_col]] <- as.mo(amr_df[[mo_col]])}, silent = TRUE)
+    try(
+      {
+        amr_df[[mo_col]] <- as.mo(amr_df[[mo_col]])
+      },
+      silent = TRUE
+    )
   }
-  
+
   # SIR columns
   if (!is.null(sir_cols) && length(sir_cols) > 0) {
     for (col in sir_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.sir(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.sir(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # MIC columns
   if (!is.null(mic_cols) && length(mic_cols) > 0) {
     for (col in mic_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.mic(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.mic(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # Disk columns
   if (!is.null(disk_cols) && length(disk_cols) > 0) {
     for (col in disk_cols) {
       if (!is.null(col) && col != "None" && col %in% names(amr_df)) {
-        try({amr_df[[col]] <- as.disk(amr_df[[col]])}, silent = TRUE)
+        try(
+          {
+            amr_df[[col]] <- as.disk(amr_df[[col]])
+          },
+          silent = TRUE
+        )
       }
     }
   }
-  
+
   # Date column: try to coerce to Date with common formats
   if (!is.null(date_col) && date_col != "None" && date_col %in% names(amr_df)) {
     d <- amr_df[[date_col]]
@@ -343,29 +388,32 @@ create_amr_obj <- function(df,
       if (inherits(parsed, "try-error") || all(is.na(parsed))) {
         parsed <- try(as.Date(d, format = "%d/%m/%Y"), silent = TRUE)
       }
-      if (!(inherits(parsed, "try-error")) ) {
+      if (!(inherits(parsed, "try-error"))) {
         amr_df[[date_col]] <- parsed
       }
     }
   }
-  
+
   # Subject column -> SUBJID factor
   if (!is.null(subject_col) && subject_col != "None" && subject_col %in% names(amr_df)) {
     amr_df$SUBJID <- as.factor(amr_df[[subject_col]])
   }
-  
+
   # Optional: filter first isolate per patient x microorganism (earliest date)
   if (isTRUE(filter_first_isolate)) {
-    amr_df <- tryCatch({
-      amr_df %>%
-        dplyr::filter(
-          first_isolate(col_mo = mo_col, col_date = date_col, col_subjid = "SUBJID")
-        )
-    }, error = function(e) {
-      warning(sprintf("first_isolate filter failed: %s", e$message), call. = FALSE)
-      # return unfiltered data so the rest of the processing continues
-      amr_df
-    })
+    amr_df <- tryCatch(
+      {
+        amr_df %>%
+          dplyr::filter(
+            first_isolate(col_mo = mo_col, col_date = date_col, col_subjid = "SUBJID")
+          )
+      },
+      error = function(e) {
+        warning(sprintf("first_isolate filter failed: %s", e$message), call. = FALSE)
+        # return unfiltered data so the rest of the processing continues
+        amr_df
+      }
+    )
   }
 
   amr_obj <- list(data = amr_df)
@@ -408,17 +456,19 @@ create_amr_obj <- function(df,
       )
     )
   }
-  
+
   # Produce additional properties for the antibiotic columns (ab)
   ab_cols <- c(sir_cols, mic_cols, disk_cols)
   ab_cols <- unique(ab_cols[!ab_cols %in% c(NULL, "None")])
   if (!is.null(ab_cols)) {
     ab_vals <- as.ab(ab_cols)
     col_types <- ifelse(ab_cols %in% sir_cols, "SIR",
-                        ifelse(ab_cols %in% mic_cols, "MIC",
-                               ifelse(ab_cols %in% disk_cols, "Disk", NA)))
+      ifelse(ab_cols %in% mic_cols, "MIC",
+        ifelse(ab_cols %in% disk_cols, "Disk", NA)
+      )
+    )
     ab_info <- ab_info(ab_vals)
-    
+
     amr_obj$ab <- list(
       group = data.frame(
         col = ab_cols,

@@ -6,7 +6,8 @@
 #' @return UI element (tabPanel)
 tab_data_ui <- function(id) {
   ns <- NS(id)
-  tabPanel("Data",
+  tabPanel(
+    "Data",
     sidebarLayout(
       sidebarPanel(
         fileInput(ns("file"), "Upload dataset", accept = c(".csv", ".xlsx")),
@@ -36,7 +37,12 @@ tab_data_server <- function(id) {
       })]
       # 2) MIC columns: numeric and colname == as.character(as.ab(colname))
       mic_cols <- cols[sapply(cols, function(col) {
-        is.numeric(df[[col]]) && tryCatch({as.character(as.ab(col)) == col}, error=function(e) FALSE)
+        is.numeric(df[[col]]) && tryCatch(
+          {
+            as.character(as.ab(col)) == col
+          },
+          error = function(e) FALSE
+        )
       })]
       # 3) Disk columns: placeholder (no automatic detection implemented)
       disk_cols <- character(0)
@@ -61,7 +67,9 @@ tab_data_server <- function(id) {
     # Reactive value for uploaded data
     data <- reactive({
       # Provide a default dummy dataset if no file uploaded
-      if (is.null(input$file)) return(AMR::example_isolates_unclean)
+      if (is.null(input$file)) {
+        return(AMR::example_isolates_unclean)
+      }
       ext <- tools::file_ext(input$file$name)
       # Allow the user to upload CSV or Excel files
       if (ext == "csv") {
@@ -80,13 +88,41 @@ tab_data_server <- function(id) {
       cols <- names(data())
       detected <- auto_detect_columns(data())
       tagList(
-        selectInput(session$ns("mo_col"), "Microorganism column (mo)", choices = cols, selected = if(!is.null(detected$mo_col)) detected$mo_col else NULL),
-        selectizeInput(session$ns("sir_col"), "SIR column(s) (ab_sir)", choices = cols, multiple = TRUE, selected = detected$sir_cols),
-        selectizeInput(session$ns("mic_col"), "MIC column(s) (ab_mic)", choices = cols, multiple = TRUE, selected = if(length(detected$mic_cols)>0) detected$mic_cols else NULL),
-        selectizeInput(session$ns("disk_col"), "Disk column(s) (ab_disk)", choices = cols, multiple = TRUE, selected = if(length(detected$disk_cols)>0) detected$disk_cols else NULL),
-        selectInput(session$ns("date_col"), "Date column", choices = c("Optionally add the collection date" = "", cols), selected = if(!is.null(detected$date_col)) detected$date_col else NULL),
-        selectInput(session$ns("subject_col"), "Subject column", choices = cols, selected = if(!is.null(detected$subject_col)) detected$subject_col else NULL),
-        selectInput(session$ns("other_col"), "Other column", c("Other columns you may like to use for grouping" = "", cols), selected = "")
+        selectInput(
+          session$ns("mo_col"), "Microorganism column (mo)",
+          choices = cols, selected = if (!is.null(detected$mo_col)) detected$mo_col else NULL
+        ),
+        selectizeInput(
+          session$ns("sir_col"), "SIR column(s) (ab_sir)",
+          choices = cols, multiple = TRUE, selected = detected$sir_cols
+        ),
+        selectizeInput(
+          session$ns("mic_col"), "MIC column(s) (ab_mic)",
+          choices = cols, multiple = TRUE,
+          selected = if (length(detected$mic_cols) > 0) detected$mic_cols else NULL
+        ),
+        selectizeInput(
+          session$ns("disk_col"), "Disk column(s) (ab_disk)",
+          choices = cols, multiple = TRUE,
+          selected = if (length(detected$disk_cols) > 0) detected$disk_cols else NULL
+        ),
+        selectInput(
+          session$ns("date_col"), "Date column",
+          choices = c("Optionally add the collection date" = "", cols),
+          selected = if (!is.null(detected$date_col)) detected$date_col else NULL
+        ),
+        selectInput(
+          session$ns("subject_col"), "Subject column",
+          choices = cols, selected = if (!is.null(detected$subject_col)) {
+            detected$subject_col
+          } else {
+            NULL
+          }
+        ),
+        selectInput(
+          session$ns("other_col"), "Other column",
+          c("Other columns you may like to use for grouping" = "", cols), selected = ""
+        )
       )
     })
 
@@ -112,43 +148,51 @@ tab_data_server <- function(id) {
       subject_col <- if (!is.null(input$subject_col)) input$subject_col else NULL
 
       # call shared function (defined in inst/shiny/functions/create_amr_obj.R)
-      amr_obj <- tryCatch({
-        create_amr_obj(
-          df = df,
-          mo_col = mo_col,
-          sir_cols = sir_cols,
-          mic_cols = mic_cols,
-          disk_cols = disk_cols,
-          date_col = date_col,
-          subject_col = subject_col,
-          filter_first_isolate = input$filter_first_isolate
-        )
-      }, error = function(e) {
-        showNotification(paste("Mapping error:", e$message), type = "error")
-        return(NULL)
-      })
+      amr_obj <- tryCatch(
+        {
+          create_amr_obj(
+            df = df,
+            mo_col = mo_col,
+            sir_cols = sir_cols,
+            mic_cols = mic_cols,
+            disk_cols = disk_cols,
+            date_col = date_col,
+            subject_col = subject_col,
+            filter_first_isolate = input$filter_first_isolate
+          )
+        },
+        error = function(e) {
+          showNotification(paste("Mapping error:", e$message), type = "error")
+          NULL
+        }
+      )
 
       amr_obj(amr_obj)
 
-      if (is.null(amr_obj)) return()
+      if (is.null(amr_obj)) {
+        return()
+      }
 
       # Show summary of amr_obj
-      result <- tryCatch({
-        capture.output({
-          cat("amr_obj created with following structure:\n")
-          print(str(amr_obj))
-          cat("\nSummary of columns:\n")
-          print(summary(amr_obj))
-        })
-      }, error = function(e) {
-        paste("Error:", e$message)
-      })
+      result <- tryCatch(
+        {
+          capture.output({
+            cat("amr_obj created with following structure:\n")
+            print(str(amr_obj))
+            cat("\nSummary of columns:\n")
+            print(summary(amr_obj))
+          })
+        },
+        error = function(e) {
+          paste("Error:", e$message)
+        }
+      )
       output$analysis_output <- renderText({
         paste(result, collapse = "\n")
       })
     })
 
     # Return a reactive to let the main app (or other modules) access the mapped object if needed
-    return(amr_obj)
+    amr_obj
   })
 }
