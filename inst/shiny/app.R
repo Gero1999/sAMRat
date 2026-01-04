@@ -20,11 +20,15 @@ ui <- fluidPage(
   theme = bs_theme(version = 4, bootswatch = "flatly"),
   tags$head(
     tags$style(HTML(
-      ".app-header{display:flex;align-items:center;justify-content:space-between;padding:12px 8px;border-bottom:1px solid #e6e6e6;background:#fff;}
-       .app-header-left{display:flex;align-items:center;gap:12px}
-       .app-header-right{display:flex;align-items:center;gap:8px}
-       .app-title{margin:0;font-size:1.25rem;font-weight:600}
-       @media (max-width:600px){.app-header{flex-direction:column;align-items:flex-start}.app-header-right{margin-top:8px}}"
+      paste0(
+        ".app-header{display:flex;align-items:center;justify-content:space-between;",
+        "padding:12px 8px;border-bottom:1px solid #e6e6e6;background:#fff;}",
+        ".app-header-left{display:flex;align-items:center;gap:12px}",
+        ".app-header-right{display:flex;align-items:center;gap:8px}",
+        ".app-title{margin:0;font-size:1.25rem;font-weight:600}",
+        "@media (max-width:600px){.app-header{flex-direction:column;align-items:flex-start}",
+        ".app-header-right{margin-top:8px}}"
+      )
     ))
   ),
   div(

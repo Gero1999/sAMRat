@@ -24,14 +24,13 @@ modal_help_server <- function(id, trigger) {
                   "Antimicrobial Resistance (AMR) analyses using the AMR package for R."
                 ),
                 p(
-                  "Use the Data tab to upload and prepare a dataset, map columns to recognized roles ",
-                  "(microorganism, antibiotic results, MICs, disk zones, dates, subject IDs), and convert ",
-                  "columns using AMR helpers such as as.mo(), as.sir(), as.mic(), and as.disk()."
+                  "Use the Data tab to upload and prepare a dataset, map columns to recognized ",
+                  "roles (microorganism, antibiotic results, MICs, disk zones, dates, subject IDs)."
                 ),
                 p(
-                  "The app is intended as a convenience wrapper for common AMR workflows: data cleaning, ",
-                  "first-isolate filtering, and basic summary statistics. For full documentation and advanced ",
-                  "functions, see the AMR package vignette and website."
+                  "The app is intended as a convenience wrapper for common AMR workflows: ",
+                  "data cleaning, first-isolate filtering, and basic plots and results. ",
+                  "For full documentation, see the AMR package vignette and website."
                 )
               ),
               tabPanel(
@@ -41,20 +40,23 @@ modal_help_server <- function(id, trigger) {
                 tags$ul(
                   tags$li("Upload a dataset (CSV or Excel)."),
                   tags$li(
-                    "Automatically detect and/or manually map columns to: microorganism (mo), antibiotic SIR ",
-                    "results, MIC values, disk diffusion measurements, collection date, and subject ID."
+                    "Automatically detect and/or manually map columns to: microorganism (mo), ",
+                    "antibiotic SIR results, MIC values, disk diffusion measurements, ",
+                    "collection date, and subject ID."
                   ),
                   tags$li(
-                    "Preview the dataset and run the 'Do Mapping' action which converts columns into ",
-                    "AMR-friendly classes (e.g. as.mo, as.sir, as.mic)."
+                    "Preview the dataset and run the 'Do Mapping' action which converts ",
+                    "columns into AMR-friendly classes (e.g. as.mo, as.sir, as.mic)."
                   ),
                   tags$li(
-                    "Optionally filter to first isolates and export the prepared object for downstream analyses."
+                    "Optionally filter to first isolates and export the prepared object for ",
+                    "downstream analyses."
                   )
                 ),
                 p(
-                  "If something doesn't map correctly, adjust the column selections and press 'Do Mapping' ",
-                  "again. Mapped object becomes available to other modules for analysis and plotting."
+                  "If something doesn't map correctly, adjust the column selections and press 'Do ",
+                  "Mapping' again. Mapped object becomes available to other modules for ",
+                  "analysis and plotting."
                 )
               )
             ),
