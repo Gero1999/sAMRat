@@ -31,7 +31,9 @@ modal_settings_server <- function(id, trigger) {
         "Turkish" = "tr", "Ukrainian" = "uk", "Urdu" = "ur", "Vietnamese" = "vi"
       ),
       guideline = c("EUCAST", "CLSI", "None"),
-      eucast_rules = c("breakpoints", "expected_phenotypes", "expert", "other", "all"),
+      eucast_rules = c(
+        "breakpoints", "expected_phenotypes", "expert", "other", "all"
+      ),
       keep_synonyms = c(TRUE, FALSE),
       include_PKPD = c(TRUE, FALSE),
       breakpoint_type = c("ECOFF", "animal", "human"),
@@ -46,14 +48,38 @@ modal_settings_server <- function(id, trigger) {
         showModal(
           modalDialog(
             title = "Application settings",
-            selectInput(ns("select_language"), "Choose language:", choices = choices$language, selected = settings()$language),
-            selectInput(ns("select_guideline"), "Default guideline for as.sir():", choices = choices$guideline, selected = settings()$guideline),
-            selectInput(ns("select_eucast_rules"), "Default eucast_rules for eucast_rules():", choices = choices$eucast_rules, selected = settings()$eucast_rules),
-            checkboxInput(ns("keep_synonyms"), "Keep synonyms in as.mo() and all mo_* functions", value = settings()$keep_synonyms),
-            checkboxInput(ns("include_PKPD"), "Include PK/PD breakpoints in as.sir()", value = settings()$include_PKPD),
-            selectInput(ns("select_breakpoint_type"), "Default breakpoint type for as.sir():", choices = choices$breakpoint_type, selected = settings()$breakpoint_type),
-            selectInput(ns("select_capped_mic_handling"), "Default capped MIC handling for as.sir():", choices = choices$capped_mic_handling, selected = settings()$capped_mic_handling),
-            checkboxInput(ns("include_screening"), "Include screening breakpoints in as.sir()", value = settings()$include_screening),
+            selectInput(
+              ns("select_language"), "Choose language:",
+              choices = choices$language, selected = settings()$language
+            ),
+            selectInput(
+              ns("select_guideline"), "Default guideline for as.sir():",
+              choices = choices$guideline, selected = settings()$guideline
+            ),
+            selectInput(
+              ns("select_eucast_rules"), "Default eucast_rules for eucast_rules():",
+              choices = choices$eucast_rules, selected = settings()$eucast_rules
+            ),
+            checkboxInput(
+              ns("keep_synonyms"), "Keep synonyms in as.mo() and all mo_* functions",
+              value = settings()$keep_synonyms
+            ),
+            checkboxInput(
+              ns("include_PKPD"), "Include PK/PD breakpoints in as.sir()",
+              value = settings()$include_PKPD
+            ),
+            selectInput(
+              ns("select_breakpoint_type"), "Default breakpoint type for as.sir():",
+              choices = choices$breakpoint_type, selected = settings()$breakpoint_type
+            ),
+            selectInput(
+              ns("select_capped_mic_handling"), "Default capped MIC handling for as.sir():",
+              choices = choices$capped_mic_handling, selected = settings()$capped_mic_handling
+            ),
+            checkboxInput(
+              ns("include_screening"), "Include screening breakpoints in as.sir()",
+              value = settings()$include_screening
+            ),
             footer = tagList(
               modalButton("Cancel"),
               actionButton(ns("save_settings"), "Save", class = "btn btn-primary")
@@ -104,8 +130,8 @@ modal_settings_server <- function(id, trigger) {
     })
 
     # Return reactive list
-    return(list(general_settings = reactive({
+    list(general_settings = reactive({
       settings()
-    })))
+    }))
   })
 }

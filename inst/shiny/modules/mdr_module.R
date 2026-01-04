@@ -10,9 +10,18 @@ mdr_ui <- function(id) {
     sidebarLayout(
       sidebarPanel(
         selectInput(ns("guideline"), "Guideline", choices = c(
-          "CMI 2012", "Magiorakos et al. 2012", "EUCAST 2023", "EUCAST 2022", "EUCAST 2021", "EUCAST 2020", "EUCAST 2019", "EUCAST 2018", "EUCAST 2017", "EUCAST 2016", "EUCAST 2015", "EUCAST 2014", "EUCAST 2013", "EUCAST 2012", "EUCAST 2011", "EUCAST 2010", "EUCAST 2009", "EUCAST 2008", "EUCAST 2007", "EUCAST 2006", "EUCAST 2005", "EUCAST 2004", "EUCAST 2003", "EUCAST 2002", "EUCAST 2001", "EUCAST 2000"
+          "CMI 2012", "Magiorakos et al. 2012", "EUCAST 2023", "EUCAST 2022",
+          "EUCAST 2021", "EUCAST 2020", "EUCAST 2019", "EUCAST 2018",
+          "EUCAST 2017", "EUCAST 2016", "EUCAST 2015", "EUCAST 2014",
+          "EUCAST 2013", "EUCAST 2012", "EUCAST 2011", "EUCAST 2010",
+          "EUCAST 2009", "EUCAST 2008", "EUCAST 2007", "EUCAST 2006",
+          "EUCAST 2005", "EUCAST 2004", "EUCAST 2003", "EUCAST 2002",
+          "EUCAST 2001", "EUCAST 2000"
         ), selected = "CMI 2012"),
-        sliderInput(ns("pct_required_classes"), "% Required Classes", min = 0, max = 1, value = 0.5, step = 0.05),
+        sliderInput(
+          ns("pct_required_classes"), "% Required Classes",
+          min = 0, max = 1, value = 0.5, step = 0.05
+        ),
         checkboxInput(ns("combine_SI"), "Combine S and I", value = TRUE),
         checkboxInput(ns("only_sir_columns"), "Only SIR columns", value = TRUE),
         actionButton(ns("run_mdr"), "Run MDR Analysis", icon = icon("play"))
@@ -47,13 +56,19 @@ mdr_server <- function(id, amr_obj) {
     observeEvent(input$run_mdr, {
       ao <- amr_obj()
       if (is.null(ao) || is.null(ao$data)) {
-        showNotification("No mapped data available. Please run 'Do Mapping' in the Data tab first.", type = "error")
+        showNotification(
+          "No mapped data available. Please run 'Do Mapping' in the Data tab first.",
+          type = "error"
+        )
         return()
       }
       df <- ao$data
       # Try to auto-detect mo column
       mo_col <- if (!is.null(ao$mo) && !is.null(ao$mo$naming)) {
-        intersect(names(df), c("mo", "MO", "microorganism", "organism"))[1]
+        intersect(
+          names(df),
+          c("mo", "MO", "microorganism", "organism")
+        )[1]
       } else {
         NULL
       }
@@ -71,8 +86,11 @@ mdr_server <- function(id, amr_obj) {
             )
         },
         error = function(e) {
-          showNotification(paste("MDR analysis error:", e$message), type = "error")
-          return(NULL)
+          showNotification(
+            paste("MDR analysis error:", e$message),
+            type = "error"
+          )
+          NULL
         }
       )
       if (!is.null(res)) {

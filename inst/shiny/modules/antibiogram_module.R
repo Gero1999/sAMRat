@@ -23,7 +23,11 @@ antibiogram_ui <- function(id) {
         selectInput(ns("syndromic_group"), "Syndromic group (column):",
           choices = c("None"), selected = "None"
         ),
-        checkboxInput(ns("only_all_tested"), "Require all antimicrobials tested (combination)", value = FALSE),
+        checkboxInput(
+          ns("only_all_tested"),
+          "Require all antimicrobials tested (combination)",
+          value = FALSE
+        ),
         checkboxInput(ns("combine_SI"), "Combine S and I as susceptible", value = TRUE),
         numericInput(ns("digits"), "Digits (rounding)", value = 0, min = 0, step = 1),
         # More descriptive choices for formatting_type (labels show number and a short description)
@@ -60,13 +64,24 @@ antibiogram_ui <- function(id) {
         checkboxInput(ns("wisca"), "Use WISCA (Bayesian) model", value = FALSE),
         conditionalPanel(
           condition = paste0("input['", ns("wisca"), "'] == true"),
-          numericInput(ns("simulations"), "WISCA simulations:", value = 1000, min = 100, step = 100),
-          numericInput(ns("conf_interval"), "Confidence interval:", value = 0.95, min = 0.5, max = 0.9999, step = 0.01),
-          selectInput(ns("interval_side"), "Interval side:", choices = c("two-tailed", "left", "right"), selected = "two-tailed")
+          numericInput(
+            ns("simulations"), "WISCA simulations:", value = 1000, min = 100, step = 100
+          ),
+          numericInput(
+            ns("conf_interval"), "Confidence interval:",
+            value = 0.95, min = 0.5, max = 0.9999, step = 0.01
+          ),
+          selectInput(
+            ns("interval_side"), "Interval side:",
+            choices = c("two-tailed", "left", "right"), selected = "two-tailed"
+          )
         ),
         actionButton(ns("generate"), "Generate antibiogram", class = "btn btn-primary w-100"),
         br(), br(),
-        helpText("Data source: fixed to amr_obj$data. Language and AMR package options are taken from global options/modal settings.")
+        helpText(
+          "Data source: fixed to amr_obj$data. Language and AMR package options are taken from ",
+          "global options/modal settings."
+        )
       ),
       mainPanel(
         tabsetPanel(
@@ -135,11 +150,17 @@ antibiogram_server <- function(amr_obj, id) {
 
         output$antimicrobials_ui <- renderUI({
           ns <- session$ns
-          selectizeInput(ns("antimicrobials"), "Antimicrobials (select or type combinations, e.g. TZP+TOB):",
+          selectizeInput(
+            ns("antimicrobials"),
+            "Antimicrobials (select or type combinations, e.g. TZP+TOB):",
             choices = sir_cols,
-            selected = if (length(sir_cols) > 0) sir_cols[seq_len(min(4, length(sir_cols)))] else NULL,
+            selected = if (length(sir_cols) > 0)
+              sir_cols[seq_len(min(4, length(sir_cols)))] else NULL,
             multiple = TRUE,
-            options = list(create = TRUE, placeholder = "Pick or type names/codes")
+            options = list(
+              create = TRUE,
+              placeholder = "Pick or type names/codes"
+            )
           )
         })
 
@@ -160,7 +181,10 @@ antibiogram_server <- function(amr_obj, id) {
 
       antimicrobials <- input$antimicrobials
       if (is.null(antimicrobials) || length(antimicrobials) == 0) {
-        showNotification("Please select at least one antimicrobial (or type combinations).", type = "warning")
+        showNotification(
+          "Please select at least one antimicrobial (or type combinations).",
+          type = "warning"
+        )
         return()
       }
 
@@ -170,7 +194,9 @@ antibiogram_server <- function(amr_obj, id) {
         antimicrobials = antimicrobials,
         mo_transform = if (input$mo_transform == "none") NULL else input$mo_transform,
         ab_transform = if (input$ab_transform == "none") NULL else input$ab_transform,
-        syndromic_group = if (is.null(input$syndromic_group) || input$syndromic_group == "None") NULL else input$syndromic_group,
+        syndromic_group = if (
+          is.null(input$syndromic_group) || input$syndromic_group == "None"
+        ) NULL else input$syndromic_group,
         only_all_tested = isTRUE(input$only_all_tested),
         digits = input$digits,
         formatting_type = as.numeric(input$formatting_type),
@@ -195,8 +221,10 @@ antibiogram_server <- function(amr_obj, id) {
           do.call(AMR::antibiogram, args)
         },
         error = function(e) {
-          showNotification(paste("antibiogram() error:", e$message), type = "error", duration = NULL)
-          return(structure(list(error = TRUE, message = e$message), class = "ab_error"))
+          showNotification(
+            paste("antibiogram() error:", e$message), type = "error", duration = NULL
+          )
+          structure(list(error = TRUE, message = e$message), class = "ab_error")
         }
       )
 
@@ -224,7 +252,10 @@ antibiogram_server <- function(amr_obj, id) {
         }
 
         if (is.null(df_out)) {
-          showNotification("Could not coerce antibiogram result to a table. See the Numeric (long) tab for raw numbers.", type = "warning")
+          showNotification(
+            "Could not coerce antibiogram result to a table.",
+            type = "warning"
+          )
           return(NULL)
         }
 
@@ -262,18 +293,22 @@ antibiogram_server <- function(amr_obj, id) {
             },
             error = function(e) NULL
           )
-          if (!is.null(df_out)) DT::datatable(df_out, options = list(pageLength = 10)) else NULL
+          if (!is.null(df_out)) {
+            DT::datatable(df_out, options = list(pageLength = 10))
+          } else {
+            NULL
+          }
         }
       })
     })
 
     # Expose a small reactive for testing/others if needed
-    return(list(
+    list(
       last_result = reactive({
         # capture the last generated result by reading the print output
         # Not a perfect store; consumers should rely on UI outputs
         NULL
       })
-    ))
+    )
   })
 }

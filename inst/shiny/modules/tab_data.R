@@ -88,13 +88,41 @@ tab_data_server <- function(id) {
       cols <- names(data())
       detected <- auto_detect_columns(data())
       tagList(
-        selectInput(session$ns("mo_col"), "Microorganism column (mo)", choices = cols, selected = if (!is.null(detected$mo_col)) detected$mo_col else NULL),
-        selectizeInput(session$ns("sir_col"), "SIR column(s) (ab_sir)", choices = cols, multiple = TRUE, selected = detected$sir_cols),
-        selectizeInput(session$ns("mic_col"), "MIC column(s) (ab_mic)", choices = cols, multiple = TRUE, selected = if (length(detected$mic_cols) > 0) detected$mic_cols else NULL),
-        selectizeInput(session$ns("disk_col"), "Disk column(s) (ab_disk)", choices = cols, multiple = TRUE, selected = if (length(detected$disk_cols) > 0) detected$disk_cols else NULL),
-        selectInput(session$ns("date_col"), "Date column", choices = c("Optionally add the collection date" = "", cols), selected = if (!is.null(detected$date_col)) detected$date_col else NULL),
-        selectInput(session$ns("subject_col"), "Subject column", choices = cols, selected = if (!is.null(detected$subject_col)) detected$subject_col else NULL),
-        selectInput(session$ns("other_col"), "Other column", c("Other columns you may like to use for grouping" = "", cols), selected = "")
+        selectInput(
+          session$ns("mo_col"), "Microorganism column (mo)",
+          choices = cols, selected = if (!is.null(detected$mo_col)) detected$mo_col else NULL
+        ),
+        selectizeInput(
+          session$ns("sir_col"), "SIR column(s) (ab_sir)",
+          choices = cols, multiple = TRUE, selected = detected$sir_cols
+        ),
+        selectizeInput(
+          session$ns("mic_col"), "MIC column(s) (ab_mic)",
+          choices = cols, multiple = TRUE,
+          selected = if (length(detected$mic_cols) > 0) detected$mic_cols else NULL
+        ),
+        selectizeInput(
+          session$ns("disk_col"), "Disk column(s) (ab_disk)",
+          choices = cols, multiple = TRUE,
+          selected = if (length(detected$disk_cols) > 0) detected$disk_cols else NULL
+        ),
+        selectInput(
+          session$ns("date_col"), "Date column",
+          choices = c("Optionally add the collection date" = "", cols),
+          selected = if (!is.null(detected$date_col)) detected$date_col else NULL
+        ),
+        selectInput(
+          session$ns("subject_col"), "Subject column",
+          choices = cols, selected = if (!is.null(detected$subject_col)) {
+            detected$subject_col
+          } else {
+            NULL
+          }
+        ),
+        selectInput(
+          session$ns("other_col"), "Other column",
+          c("Other columns you may like to use for grouping" = "", cols), selected = ""
+        )
       )
     })
 
@@ -135,7 +163,7 @@ tab_data_server <- function(id) {
         },
         error = function(e) {
           showNotification(paste("Mapping error:", e$message), type = "error")
-          return(NULL)
+          NULL
         }
       )
 
@@ -165,6 +193,6 @@ tab_data_server <- function(id) {
     })
 
     # Return a reactive to let the main app (or other modules) access the mapped object if needed
-    return(amr_obj)
+    amr_obj
   })
 }
