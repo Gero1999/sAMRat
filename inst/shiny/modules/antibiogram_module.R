@@ -14,12 +14,15 @@ antibiogram_ui <- function(id) {
       sidebarPanel(
         uiOutput(ns("antimicrobials_ui")),
         selectInput(ns("mo_transform"), "Microorganism transform:",
-                    choices = c("shortname", "name", "gramstain", "none"),
-                    selected = "shortname"),
+          choices = c("shortname", "name", "gramstain", "none"),
+          selected = "shortname"
+        ),
         selectInput(ns("ab_transform"), "Antimicrobial transform:",
-                    choices = c("name", "atc", "none"), selected = "name"),
+          choices = c("name", "atc", "none"), selected = "name"
+        ),
         selectInput(ns("syndromic_group"), "Syndromic group (column):",
-                    choices = c("None"), selected = "None"),
+          choices = c("None"), selected = "None"
+        ),
         checkboxInput(ns("only_all_tested"), "Require all antimicrobials tested (combination)", value = FALSE),
         checkboxInput(ns("combine_SI"), "Combine S and I as susceptible", value = TRUE),
         numericInput(ns("digits"), "Digits (rounding)", value = 0, min = 0, step = 1),
@@ -55,10 +58,11 @@ antibiogram_ui <- function(id) {
         textInput(ns("sep"), "Combination separator:", value = " + "),
         checkboxInput(ns("sort_columns"), "Sort antimicrobial columns", value = TRUE),
         checkboxInput(ns("wisca"), "Use WISCA (Bayesian) model", value = FALSE),
-        conditionalPanel(condition = paste0("input['", ns("wisca"), "'] == true"),
-                         numericInput(ns("simulations"), "WISCA simulations:", value = 1000, min = 100, step = 100),
-                         numericInput(ns("conf_interval"), "Confidence interval:", value = 0.95, min = 0.5, max = 0.9999, step = 0.01),
-                         selectInput(ns("interval_side"), "Interval side:", choices = c("two-tailed", "left", "right"), selected = "two-tailed")
+        conditionalPanel(
+          condition = paste0("input['", ns("wisca"), "'] == true"),
+          numericInput(ns("simulations"), "WISCA simulations:", value = 1000, min = 100, step = 100),
+          numericInput(ns("conf_interval"), "Confidence interval:", value = 0.95, min = 0.5, max = 0.9999, step = 0.01),
+          selectInput(ns("interval_side"), "Interval side:", choices = c("two-tailed", "left", "right"), selected = "two-tailed")
         ),
         actionButton(ns("generate"), "Generate antibiogram", class = "btn btn-primary w-100"),
         br(), br(),
@@ -83,48 +87,68 @@ antibiogram_server <- function(amr_obj, id) {
     # reactive that returns the dataset (or NULL)
     data_r <- reactive({
       ao <- NULL
-      try({ ao <- amr_obj() }, silent = TRUE)
-      if (is.null(ao)) return(NULL)
-      if (is.list(ao) && !is.null(ao$data)) return(ao$data)
+      try(
+        {
+          ao <- amr_obj()
+        },
+        silent = TRUE
+      )
+      if (is.null(ao)) {
+        return(NULL)
+      }
+      if (is.list(ao) && !is.null(ao$data)) {
+        return(ao$data)
+      }
       # if amr_obj itself is the data.frame
-      if (is.data.frame(ao)) return(ao)
+      if (is.data.frame(ao)) {
+        return(ao)
+      }
       NULL
     })
 
     # Detect SIR-like columns and update antimicrobials UI
-    observeEvent(data_r(), {
-      df <- data_r()
-      if (is.null(df)) {
-        output$antimicrobials_ui <- renderUI({
-          helpText("No data available (amr_obj$data is NULL).")
-        })
-        return()
-      }
-
-      sir_cols <- names(df)[sapply(df, function(col) {
-        # prefer AMR::is.sir_eligible if available, fall back to checking values
-        ok <- FALSE
-        try({ ok <- AMR::is.sir_eligible(col) }, silent = TRUE)
-        if (isFALSE(ok)) {
-          # quick heuristic: column contains at least one of 'S','I','R'
-          ok <- any(na.omit(as.character(col)) %in% c("S","I","R","s","i","r"))
+    observeEvent(data_r(),
+      {
+        df <- data_r()
+        if (is.null(df)) {
+          output$antimicrobials_ui <- renderUI({
+            helpText("No data available (amr_obj$data is NULL).")
+          })
+          return()
         }
-        ok
-      })]
 
-      output$antimicrobials_ui <- renderUI({
-        ns <- session$ns
-  selectizeInput(ns("antimicrobials"), "Antimicrobials (select or type combinations, e.g. TZP+TOB):",
-           choices = sir_cols,
-           selected = if (length(sir_cols) > 0) sir_cols[seq_len(min(4, length(sir_cols)))] else NULL,
-           multiple = TRUE,
-           options = list(create = TRUE, placeholder = 'Pick or type names/codes'))
-      })
+        sir_cols <- names(df)[sapply(df, function(col) {
+          # prefer AMR::is.sir_eligible if available, fall back to checking values
+          ok <- FALSE
+          try(
+            {
+              ok <- AMR::is.sir_eligible(col)
+            },
+            silent = TRUE
+          )
+          if (isFALSE(ok)) {
+            # quick heuristic: column contains at least one of 'S','I','R'
+            ok <- any(na.omit(as.character(col)) %in% c("S", "I", "R", "s", "i", "r"))
+          }
+          ok
+        })]
 
-      # syndromic group choices: columns or None
-      grp_choices <- c("None", names(df))
-      updateSelectInput(session, "syndromic_group", choices = grp_choices, selected = "None")
-    }, ignoreNULL = FALSE)
+        output$antimicrobials_ui <- renderUI({
+          ns <- session$ns
+          selectizeInput(ns("antimicrobials"), "Antimicrobials (select or type combinations, e.g. TZP+TOB):",
+            choices = sir_cols,
+            selected = if (length(sir_cols) > 0) sir_cols[seq_len(min(4, length(sir_cols)))] else NULL,
+            multiple = TRUE,
+            options = list(create = TRUE, placeholder = "Pick or type names/codes")
+          )
+        })
+
+        # syndromic group choices: columns or None
+        grp_choices <- c("None", names(df))
+        updateSelectInput(session, "syndromic_group", choices = grp_choices, selected = "None")
+      },
+      ignoreNULL = FALSE
+    )
 
     # Generate antibiogram on button press
     observeEvent(input$generate, {
@@ -166,22 +190,34 @@ antibiogram_server <- function(amr_obj, id) {
       }
 
       # Run antibiogram() defensively
-      ab_res <- tryCatch({
-        do.call(AMR::antibiogram, args)
-      }, error = function(e) {
-        showNotification(paste("antibiogram() error:", e$message), type = "error", duration = NULL)
-        return(structure(list(error = TRUE, message = e$message), class = "ab_error"))
-      })
+      ab_res <- tryCatch(
+        {
+          do.call(AMR::antibiogram, args)
+        },
+        error = function(e) {
+          showNotification(paste("antibiogram() error:", e$message), type = "error", duration = NULL)
+          return(structure(list(error = TRUE, message = e$message), class = "ab_error"))
+        }
+      )
 
       # Render the antibiogram result as a data.frame table when possible
       output$antibiogram_print <- DT::renderDT({
-        if (is.null(ab_res)) return(NULL)
-        if (inherits(ab_res, "ab_error")) return(NULL)
+        if (is.null(ab_res)) {
+          return(NULL)
+        }
+        if (inherits(ab_res, "ab_error")) {
+          return(NULL)
+        }
 
         # Try coercing the result to a data.frame. Many antibiogram objects
         # can be coerced via as.data.frame(); otherwise fall back to the
         # 'long_numeric' attribute if present.
-        df_out <- tryCatch({ as.data.frame(ab_res) }, error = function(e) NULL)
+        df_out <- tryCatch(
+          {
+            as.data.frame(ab_res)
+          },
+          error = function(e) NULL
+        )
         if (is.null(df_out)) {
           long <- attr(ab_res, "long_numeric")
           if (!is.null(long) && is.data.frame(long)) df_out <- long
@@ -197,23 +233,35 @@ antibiogram_server <- function(amr_obj, id) {
 
       # Plot if possible
       output$antibiogram_plot <- renderPlot({
-        if (is.null(ab_res) || inherits(ab_res, "ab_error")) return()
+        if (is.null(ab_res) || inherits(ab_res, "ab_error")) {
+          return()
+        }
         if (requireNamespace("ggplot2", quietly = TRUE)) {
-          try({
-            ggplot2::autoplot(ab_res)
-          }, silent = TRUE)
+          try(
+            {
+              ggplot2::autoplot(ab_res)
+            },
+            silent = TRUE
+          )
         }
       })
 
       # Show numeric long attribute if present
       output$antibiogram_table <- DT::renderDT({
-        if (is.null(ab_res) || inherits(ab_res, "ab_error")) return(NULL)
+        if (is.null(ab_res) || inherits(ab_res, "ab_error")) {
+          return(NULL)
+        }
         long <- attr(ab_res, "long_numeric")
         if (!is.null(long) && is.data.frame(long)) {
           DT::datatable(long, options = list(pageLength = 10))
         } else {
           # fallback: try to coerce to data.frame
-          df_out <- tryCatch({ as.data.frame(ab_res) }, error = function(e) NULL)
+          df_out <- tryCatch(
+            {
+              as.data.frame(ab_res)
+            },
+            error = function(e) NULL
+          )
           if (!is.null(df_out)) DT::datatable(df_out, options = list(pageLength = 10)) else NULL
         }
       })

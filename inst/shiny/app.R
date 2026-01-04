@@ -27,18 +27,21 @@ ui <- fluidPage(
        @media (max-width:600px){.app-header{flex-direction:column;align-items:flex-start}.app-header-right{margin-top:8px}}"
     ))
   ),
-  div(class = "app-header",
-      div(class = "app-header-left",
-          tags$img(src = "images/logo.png", alt = "AMR logo", height = "50", style = "width:auto;height:50px;"),
-          div(
-            h1(class = "app-title", "sAMRat"),
-            p(style = "margin:0;font-size:0.9rem;color:#666;", "shiny AMR analysis toolkit")
-          )
-      ),
-      div(class = "app-header-right",
-          actionButton("help_button", "", icon = icon("circle-info"), class = "btn btn-outline-secondary"),
-          actionButton("settings_button", "", icon = icon("cog"), class = "btn btn-outline-secondary")
+  div(
+    class = "app-header",
+    div(
+      class = "app-header-left",
+      tags$img(src = "images/logo.png", alt = "AMR logo", height = "50", style = "width:auto;height:50px;"),
+      div(
+        h1(class = "app-title", "sAMRat"),
+        p(style = "margin:0;font-size:0.9rem;color:#666;", "shiny AMR analysis toolkit")
       )
+    ),
+    div(
+      class = "app-header-right",
+      actionButton("help_button", "", icon = icon("circle-info"), class = "btn btn-outline-secondary"),
+      actionButton("settings_button", "", icon = icon("cog"), class = "btn btn-outline-secondary")
+    )
   ),
   # Main tabset: place the data module as the primary tab
   tabsetPanel(

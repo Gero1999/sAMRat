@@ -6,22 +6,27 @@
 #' @return UI element (tabPanel)
 tab_results_ui <- function(id) {
   ns <- NS(id)
-  tabPanel("Results",
+  tabPanel(
+    "Results",
     tabsetPanel(
-      tabPanel("Full dataset",
+      tabPanel(
+        "Full dataset",
         br(),
         DT::DTOutput(ns("full_table"))
       ),
-      tabPanel("Antibiograms",
+      tabPanel(
+        "Antibiograms",
         br(),
         antibiogram_ui(ns("antibiogram")),
         p("Antibiograms coming soon")
       ),
-      tabPanel("PCA",
+      tabPanel(
+        "PCA",
         br(),
         pca_ui(ns("pca"))
       ),
-      tabPanel("MDR",
+      tabPanel(
+        "MDR",
         br(),
         mdr_ui(ns("mdr"))
       )
@@ -38,7 +43,9 @@ tab_results_server <- function(id, amr_obj) {
     # Full dataset table
     output$full_table <- DT::renderDT({
       ao <- amr_obj()
-      if (is.null(ao) || is.null(ao$data)) return(NULL)
+      if (is.null(ao) || is.null(ao$data)) {
+        return(NULL)
+      }
       DT::datatable(ao$data, options = list(pageLength = 10))
     })
 

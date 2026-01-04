@@ -13,9 +13,11 @@ pca_ui <- function(id) {
     sidebarLayout(
       sidebarPanel(
         selectInput(ns("group_column"), "Group by (column):",
-                    choices = NULL, selected = NULL, multiple = TRUE),
+          choices = NULL, selected = NULL, multiple = TRUE
+        ),
         selectizeInput(ns("ab_cols"), "Antimicrobial SIR columns:",
-                       choices = NULL, multiple = TRUE),
+          choices = NULL, multiple = TRUE
+        ),
         actionButton(ns("run_pca"), "Run PCA", class = "btn btn-primary w-100"),
         br(), br(),
         helpText("PCA uses per-group susceptibility proportions of selected antimicrobials.")
@@ -50,23 +52,25 @@ pca_server <- function(amr_obj, id) {
 
     # Using the data information, update the choices for group_column and ab_cols
     observeEvent(data(), {
-        mo_grp_cols <- setdiff(names(data()), names(amr_obj()$data))
-        updateSelectInput(session, "group_column",
-                          choices = mo_grp_cols,
-                          selected = if (length(mo_grp_cols) > 0) mo_grp_cols[1] else NULL)
-        sir_cols <- amr_obj()$ab$columns$sir
-        updateSelectizeInput(session, "ab_cols",
-                             choices = sir_cols,
-                             selected = if (length(sir_cols) > 0) sir_cols else NULL)
+      mo_grp_cols <- setdiff(names(data()), names(amr_obj()$data))
+      updateSelectInput(session, "group_column",
+        choices = mo_grp_cols,
+        selected = if (length(mo_grp_cols) > 0) mo_grp_cols[1] else NULL
+      )
+      sir_cols <- amr_obj()$ab$columns$sir
+      updateSelectizeInput(session, "ab_cols",
+        choices = sir_cols,
+        selected = if (length(sir_cols) > 0) sir_cols else NULL
+      )
     })
 
 
     pca_result <- reactive({
       data() %>%
-      group_by(!!!syms(input$group_column)) %>%
-      summarize_if(is.sir, resistance) %>%
-      select(any_of(c(input$ab_cols, input$group_column))) %>%
-      pca()
+        group_by(!!!syms(input$group_column)) %>%
+        summarize_if(is.sir, resistance) %>%
+        select(any_of(c(input$ab_cols, input$group_column))) %>%
+        pca()
     })
 
     output$pca_summary <- renderPrint({
@@ -78,6 +82,5 @@ pca_server <- function(amr_obj, id) {
       req(pca_result())
       ggplot_pca(pca_result(), label_points = input$label_points)
     })
-
   })
 }
