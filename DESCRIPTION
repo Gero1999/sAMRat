@@ -12,7 +12,7 @@ Description: A 'shiny' application to perform antimicrobial resistance data anal
     and generate reports with visualizations and statistics. It uses the 'AMR'
     package for most data processing and analysis. Berends MS, Luz CF, Friedrich AW, Sinha BNM, Albers CJ, Glasner C.
     An R package for working with antimicrobial resistance data. J Stat Softw. 2022;104(3):1–31. doi:10.18637/jss.v104.i03
-License: Apache-2.0
+License: GPL-2
 Imports: 
     AMR,
     dplyr,
